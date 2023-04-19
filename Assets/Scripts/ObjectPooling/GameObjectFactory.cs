@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ObjectPooling
 {
-    public class GameObjectFactory<T> : IObjectFactory<T> where T : MonoBehaviour, IPoolable<T>
+    public class GameObjectFactory<T> : IObjectFactory<T> where T : MonoBehaviour, IPoolable
     {
         private readonly T _prefab;
 

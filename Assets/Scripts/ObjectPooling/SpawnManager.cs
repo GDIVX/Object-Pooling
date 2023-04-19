@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ObjectPooling
 {
-    public class SpawnManager<T> where T : MonoBehaviour, IPoolable<T>
+    public class SpawnManager<T> where T : MonoBehaviour, IPoolable
     {
         private ObjectPool<T> pool;
         private IObjectFactory<T> factory;

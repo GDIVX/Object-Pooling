@@ -7,10 +7,12 @@ namespace ObjectPooling
     /// <summary>
     /// A class for managing the instantiation and recycling of GameObjects in Unity.
     /// </summary>
-    public class ObjectPool<T> where T : MonoBehaviour , IPoolable<T>
+    public class ObjectPool<T> where T : MonoBehaviour, IPoolable
     {
         private T prefab;
         private List<T> pool = new();
+
+        public int Count => pool.Count;
 
         /// <summary>
         /// Initializes a new instance of the ObjectPool class.
@@ -35,11 +37,15 @@ namespace ObjectPooling
                     break;
                 }
             }
+
+            //If no inactive objects were found, instantiate a new one
             if (result == null)
             {
-                result = GameObject.Instantiate(prefab.GameObject) as T;
+                GameObject gameObject = GameObject.Instantiate(prefab.GameObject);
+                result = gameObject.AddComponent<T>();
                 pool.Add(result);
             }
+            
             result.GameObject.SetActive(true);
             result.OnGet();
             return result;
@@ -79,7 +85,7 @@ namespace ObjectPooling
         /// </summary>
         public void Clear()
         {
-            foreach (IPoolable<T> poolable in pool)
+            foreach (IPoolable poolable in pool)
             {
                 GameObject.Destroy(poolable.GameObject);
             }
@@ -94,9 +100,19 @@ namespace ObjectPooling
         {
             for (int i = 0; i < count; i++)
             {
-                T poolable = GameObject.Instantiate(prefab.GameObject) as T;
-                poolable.GameObject.SetActive(false);
-                pool.Add(poolable);
+                GameObject poolable = GameObject.Instantiate(prefab.GameObject);
+
+                //Extract T from the instantiated GameObject
+                T poolableComponent = poolable.GetComponent<T>();
+
+                //If the instantiated GameObject does not have a T component, add one
+                if (poolableComponent == null)
+                {
+                    poolableComponent = poolable.AddComponent<T>();
+                }
+
+                poolable.SetActive(false);
+                pool.Add(poolableComponent);
             }
         }
     }

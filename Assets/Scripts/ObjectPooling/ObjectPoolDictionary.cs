@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace ObjectPooling
 {
-    public class ObjectPoolDictionary<T> where T : MonoBehaviour , IPoolable<T>
+    public class ObjectPoolDictionary<T> where T : MonoBehaviour , IPoolable
     {
         Dictionary<string, ObjectPool<T>> pools = new();
 
         
-        public IPoolable<T> Get(string key)
+        public IPoolable Get(string key)
         {
             if (!pools.ContainsKey(key))
             {

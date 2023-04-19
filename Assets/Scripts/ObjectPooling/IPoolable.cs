@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ObjectPooling
 {
-    public interface IPoolable<T> where T : MonoBehaviour
+    public interface IPoolable 
     {
         void OnGet();
         void OnReturn();
